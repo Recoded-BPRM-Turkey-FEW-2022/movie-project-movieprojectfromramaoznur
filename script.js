@@ -103,6 +103,39 @@ const getGenre = async (getId) => {
 
 /* ---Genre Section End--- */
 
+/* ---Actors Page--- */
+
+const listActors = async () => {
+  const actors = await fetchActors();
+  renderActors(actors.results);
+};
+
+const fetchActors = async () => {
+  const url = constructUrl(`person/popular`);
+  const res = await fetch(url);
+  return res.json();
+};
+
+const renderActors = (actors) => {
+  console.log(actors);
+  CONTAINER.innerHTML = "";
+  actors.map((actor) => {
+    const actorDiv = document.createElement("div");
+    actorDiv.classList = "col-sm-6";
+    actorDiv.innerHTML = `
+        <img src="${BACKDROP_BASE_URL + actor.profile_path}" alt="${
+      actor.name
+    } poster">
+        <h3>${actor.name}</h3>`;
+    actorDiv.addEventListener("click", () => {
+      renderActorDetails(actor.id);
+    });
+    CONTAINER.appendChild(actorDiv);
+  });
+};
+
+/* ---Actors Page End--- */
+
 // You may need to add to this function, definitely don't delete it.
 const movieDetails = async (movie) => {
   const movieRes = await fetchMovie(movie.id);
