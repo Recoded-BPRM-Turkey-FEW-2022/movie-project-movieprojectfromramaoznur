@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 const TMDB_BASE_URL = "https://api.themoviedb.org/3";
 const PROFILE_BASE_URL = "http://image.tmdb.org/t/p/w185";
@@ -17,6 +17,59 @@ const constructUrl = (path) => {
     "NTQyMDAzOTE4NzY5ZGY1MDA4M2ExM2M0MTViYmM2MDI="
   )}`;
 };
+
+/* ---Filter Section--- */
+
+const fetchPopular = async () => {
+  const url = constructUrl(`movie/popular`);
+  const res = await fetch(url);
+  return res.json();
+};
+
+const popularMovies = async () => {
+  CONTAINER.innerHTML = "";
+  const popular = await fetchPopular();
+  renderMovies(popular.results);
+};
+
+const fetchTopRated = async () => {
+  const url = constructUrl(`movie/top_rated`);
+  const res = await fetch(url);
+  return res.json();
+};
+
+const topRatedMovies = async () => {
+  CONTAINER.innerHTML = "";
+  const topRated = await fetchTopRated();
+  renderMovies(topRated.results);
+};
+
+const fetchNowPlaying = async () => {
+  const url = constructUrl("movie/now_playing");
+  const res = await fetch(url);
+  return res.json();
+};
+
+const nowPlayingMovies = async () => {
+  CONTAINER.innerHTML = "";
+  const nowPlaying = await fetchNowPlaying();
+  console.log(nowPlaying);
+  renderMovies(nowPlaying.results);
+};
+
+const fetchUpComing = async () => {
+  const url = constructUrl(`movie/upcoming`);
+  const res = await fetch(url);
+  return res.json();
+};
+
+const upcomingMovies = async () => {
+  CONTAINER.innerHTML = "";
+  const upcoming = await fetchUpComing();
+  renderMovies(upcoming.results);
+};
+
+/* ---Filter Section End--- */
 
 // You may need to add to this function, definitely don't delete it.
 const movieDetails = async (movie) => {
