@@ -136,6 +136,34 @@ const renderActors = (actors) => {
 
 /* ---Actors Page End--- */
 
+/* ---Functions Needed for Movie Page */
+
+const fetchReleaseDate = async () => {
+  const url = constructUrl(`movie/${movie_id}/release_dates`);
+  const res = await fetch(url);
+  return res.json();
+};
+
+const fetchTrailer = async (movieId) => {
+  const url = constructUrl(`movie/${movieId}/videos`);
+  const res = await fetch(url);
+  return res.json();
+};
+
+const fetchRelatedMovies = async (movie_id) => {
+  const url = constructUrl(`movie/${movie_id}/similar`);
+  const res = await fetch(url);
+  return res.json();
+};
+
+const fetchCredits = async (movie_id) => {
+  const url = constructUrl(`movie/${movie_id}/credits`);
+  const res = await fetch(url);
+  return res.json();
+};
+
+/* ---Functions Needed for Movie Page End*/
+
 // You may need to add to this function, definitely don't delete it.
 const movieDetails = async (movie) => {
   const movieRes = await fetchMovie(movie.id);
