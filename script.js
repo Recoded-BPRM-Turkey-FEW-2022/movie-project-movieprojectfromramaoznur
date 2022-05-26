@@ -71,6 +71,32 @@ const upcomingMovies = async () => {
 
 /* ---Filter Section End--- */
 
+/* ---Genre Section--- */
+
+const genreIds = {
+  action: 28,
+  animation: 16,
+  comedy: 35,
+  drama: 18,
+  romance: 10749,
+};
+
+const fetchGenres = async (genreID) => {
+  const url = genreConstructUrl(genreID);
+  const res = await fetch(url);
+  return res.json();
+};
+
+const getGenre = async (getId) => {
+  CONTAINER.innerHTML = "";
+  const genId = genreIds[getId];
+  const genreMov = await fetchGenres(genId);
+  console.log(genreMov);
+  renderMovies(genreMov.results);
+};
+
+/* ---Genre Section End--- */
+
 // You may need to add to this function, definitely don't delete it.
 const movieDetails = async (movie) => {
   const movieRes = await fetchMovie(movie.id);
