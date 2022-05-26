@@ -73,6 +73,12 @@ const upcomingMovies = async () => {
 
 /* ---Genre Section--- */
 
+const genreConstructUrl = (genresID) => {
+  return `${TMDB_BASE_URL}/discover/movie?api_key=${atob(
+    "NTQyMDAzOTE4NzY5ZGY1MDA4M2ExM2M0MTViYmM2MDI="
+  )}&sort_by=popularity.desc&with_genres=${genresID}`;
+};
+
 const genreIds = {
   action: 28,
   animation: 16,
