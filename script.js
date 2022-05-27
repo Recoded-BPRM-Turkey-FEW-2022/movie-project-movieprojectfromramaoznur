@@ -193,6 +193,81 @@ searchButton.addEventListener("click", async function (e) {
 
 /* ---Search Section End--- */
 
+/* ---Movie Page--- */
+
+// You'll need to play with this function in order to add features and enhance the style.
+const renderMovies = (movies) => {
+  CONTAINER.innerHTML = "";
+  movies.map((movie) => {
+    const movieDiv = document.createElement("div");
+    movieDiv.classList = "movieDiv";
+    movieDiv.innerHTML = `
+        <img src="${BACKDROP_BASE_URL + movie.backdrop_path}" alt="${
+      movie.title
+    } poster">
+        <h1>${movie.title}</h1>`;
+
+    let genreIDs = movie.genre_ids.map((genre) => {
+      if (genre === 28) {
+        return "Action";
+      } else if (genre === 12) {
+        return "Adventure";
+      } else if (genre === 16) {
+        return "Animation";
+      } else if (genre === 35) {
+        return "Comedy";
+      } else if (genre === 80) {
+        return "Crime";
+      } else if (genre === 99) {
+        return "Documentary";
+      } else if (genre === 18) {
+        return "Drama";
+      } else if (genre === 10751) {
+        return "Family";
+      } else if (genre === 14) {
+        return "Fantasy";
+      } else if (genre === 36) {
+        return "History";
+      } else if (genre === 27) {
+        return "Horror";
+      } else if (genre === 10402) {
+        return "Music";
+      } else if (genre === 9648) {
+        return "Mystery";
+      } else if (genre === 10749) {
+        return "Romance";
+      } else if (genre === 878) {
+        return "Science Fiction";
+      } else if (genre === 10770) {
+        return "TV Movie";
+      } else if (genre === 53) {
+        return "Thriller";
+      } else if (genre === 10752) {
+        return "War";
+      } else if (genre === 37) {
+        return "Western";
+      }
+    });
+
+    const hoverDiv = document.createElement("div");
+    hoverDiv.classList.add("hoverDiv");
+    const movieGenres = document.createElement("p");
+    movieGenres.textContent = `Genres: ${genreIDs}`;
+    const movieVoting = document.createElement("p");
+    movieVoting.textContent = `Rating: ${movie.vote_average}/10`;
+    movieDiv.appendChild(hoverDiv);
+    hoverDiv.appendChild(movieGenres);
+    hoverDiv.appendChild(movieVoting);
+
+    movieDiv.addEventListener("click", () => {
+      movieDetails(movie);
+    });
+    CONTAINER.appendChild(movieDiv);
+  });
+};
+
+/* ---Movie Page End--- */
+
 // You may need to add to this function, definitely don't delete it.
 const movieDetails = async (movie) => {
   const movieRes = await fetchMovie(movie.id);
@@ -211,22 +286,6 @@ const fetchMovie = async (movieId) => {
   const url = constructUrl(`movie/${movieId}`);
   const res = await fetch(url);
   return res.json();
-};
-
-// You'll need to play with this function in order to add features and enhance the style.
-const renderMovies = (movies) => {
-  movies.map((movie) => {
-    const movieDiv = document.createElement("div");
-    movieDiv.innerHTML = `
-        <img src="${BACKDROP_BASE_URL + movie.backdrop_path}" alt="${
-      movie.title
-    } poster">
-        <h3>${movie.title}</h3>`;
-    movieDiv.addEventListener("click", () => {
-      movieDetails(movie);
-    });
-    CONTAINER.appendChild(movieDiv);
-  });
 };
 
 // You'll need to play with this function in order to add features and enhance the style.
