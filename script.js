@@ -416,4 +416,85 @@ const renderMovie = (
 };
 
 /* ---Single Movie Page End--- */
+
+/* ---Single Actor Page--- */
+
+const fetchActor = async (person_id) => {
+  const url = constructUrl(`person/${person_id}`);
+  const res = await fetch(url);
+  return res.json();
+};
+
+const FetchActorMovies = async (actorId) => {
+  const url = constructUrl(`person/${actorId}/movie_credits`);
+  const res = await fetch(url);
+  return res.json();
+};
+const renderActorDetails = async (actorId) => {
+  CONTAINER.innerHTML = "";
+  let actorInfo = await fetchActor(actorId);
+  let actorMoviesInfo = await FetchActorMovies(actorId);
+  let actorInfoArr = actorMoviesInfo.cast;
+  const actorInfoObj = {
+    Name: actorInfo.name,
+    Birthday: actorInfo.birthday || "Not known.",
+    Deathday: actorInfo.deathday || "Not dead yet.",
+    Popularity: actorInfo.popularity,
+    Picture: actorInfo.profile_path
+      ? BACKDROP_BASE_URL + actorInfo.profile_path
+      : "noImage.png",
+    Biography: actorInfo.biography || "No Biography",
+    Movies: actorInfoArr.length > 0 ? actorInfoArr : "No Movies",
+    Gender: actorInfo.gender === 1 ? "Female" : "Male",
+  };
+  CONTAINER.innerHTML = `
+    <div class="row">
+        <div class="col-md-4">
+             <img id="actor-img" src=${
+               actorInfoObj.Picture ? actorInfoObj.Picture : "noImage.png"
+             }>
+        </div>
+		<div class="col-md-8">
+			<h2 id="actor-name">${actorInfoObj.Name}</h2>
+			<p id="actor-birthday"><b>Birthday:</b> ${actorInfoObj.Birthday}</p>
+			<p id="actor-deathday"><b>Deathday:</b> ${actorInfoObj.Deathday}</p>
+			<p id="actor-gender"><b>Gender:</b> ${actorInfoObj.Gender}</p>
+			<p id="actor-popularity"><b>Popularity:</b> ${actorInfoObj.Popularity}</p>
+			<p id="actor-biography "><b>Biography:</b> ${actorInfoObj.Biography}</p>
+		</div>
+        <div>
+		<h3>Some of the actor's movies: </h3>
+			<ul id="actorMovies" class="list-unstyled">
+			</ul>
+		</div>
+	</div>`;
+  const actorMovieList = document.getElementById("actorMovies");
+
+  //Actor movies
+
+  if (typeof actorInfoObj.Movies === "string") {
+    let movieLi = document.createElement("li");
+    movieLi.innerHTML = `<p id="no-movie-found">${actorInfoObj.Movies}</p>`;
+    actorMovieList.appendChild(movieLi);
+  } else if (typeof actorInfoObj.Movies === "object") {
+    actorInfoObj.Movies.map((movie, index) => {
+      if (index < 5) {
+        let movieLi = document.createElement("li");
+        movieLi.innerHTML = `<p id="movie-title">${movie.title}</p>
+				<img id="movie-img" src='${
+          movie.poster_path
+            ? BACKDROP_BASE_URL + movie.poster_path
+            : "noImage.png"
+        }' alt = '${movie.title}' width = '100'>`;
+        movieLi.addEventListener("click", () => {
+          movieDetails(movie);
+        });
+        actorMovieList.appendChild(movieLi);
+      }
+    });
+  }
+};
+
+/* ---Single Actor Page End--- */
+
 document.addEventListener("DOMContentLoaded", autorun);
