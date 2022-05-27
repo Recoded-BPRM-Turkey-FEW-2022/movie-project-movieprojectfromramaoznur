@@ -164,6 +164,35 @@ const fetchCredits = async (movie_id) => {
 
 /* ---Functions Needed for Movie Page End*/
 
+/* ---Search Section--- */
+
+const searchConstructUrl = (value) => {
+  return `${TMDB_BASE_URL}/search/multi?api_key=${atob(
+    "NTQyMDAzOTE4NzY5ZGY1MDA4M2ExM2M0MTViYmM2MDI="
+  )}&query=${value}`;
+};
+
+const fetchSearch = async (value) => {
+  const url = searchConstructUrl(value);
+  const response = await fetch(url);
+  return response.json();
+};
+
+const searchRender = async (value) => {
+  const resultData = await fetchSearch(value);
+  renderMovies(resultData.results);
+};
+
+let searchBox = document.getElementById("searchBox");
+let searchButton = document.getElementById("searchButton");
+searchButton.addEventListener("click", async function (e) {
+  e.preventDefault();
+  let searchValue = searchBox.value;
+  searchRender(searchValue);
+});
+
+/* ---Search Section End--- */
+
 // You may need to add to this function, definitely don't delete it.
 const movieDetails = async (movie) => {
   const movieRes = await fetchMovie(movie.id);
