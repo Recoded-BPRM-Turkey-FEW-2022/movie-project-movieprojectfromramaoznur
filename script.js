@@ -311,28 +311,109 @@ const fetchMovie = async (movieId) => {
   return res.json();
 };
 
+/* ---Single Movie Page--- */
+
 // You'll need to play with this function in order to add features and enhance the style.
-const renderMovie = (movie) => {
+const renderMovie = (
+  movie,
+  trailerLink,
+  credits,
+  relatedMoveiCreditsSliced,
+  RelatedMovies
+) => {
+  let director = credits.crew.find((directorName) => {
+    return directorName.job === "Director";
+  });
+  console.log(movie);
   CONTAINER.innerHTML = `
-    <div class="row">
-        <div class="col-md-4">
+    <div class="row">	
+        <div class="moviePageImg">
              <img id="movie-backdrop" src=${
-               BACKDROP_BASE_URL + movie.backdrop_path
+               movie.backdrop_path
+                 ? BACKDROP_BASE_URL + movie.poster_path
+                 : "noImage.png"
              }>
         </div>
-        <div class="col-md-8">
-            <h2 id="movie-title">${movie.title}</h2>
+        <div class="moviePageInfo">
+			<h1 id="movie-title">${movie.title}</h1>
+			</br>
             <p id="movie-release-date"><b>Release Date:</b> ${
               movie.release_date
             }</p>
-            <p id="movie-runtime"><b>Runtime:</b> ${movie.runtime} Minutes</p>
-            <h3>Overview:</h3>
-            <p id="movie-overview">${movie.overview}</p>
-        </div>
-        </div>
+			<p id="movie-runtime"><b>Runtime:</b> ${movie.runtime} Minutes</p>
+			
+			<img id="movie-production-company-logo" src='${
+        movie.production_companies.length > 0
+          ? BACKDROP_BASE_URL + movie.production_companies[0].logo_path
+          : "noImage.png"
+      }' width="100px"">
+			<p id="movie-production-company"><b>Production Company:</b> ${
+        movie.production_companies.length > 0
+          ? movie.production_companies[0].name
+          : noImage.png
+      } Minutes</p>
+			<p id="movie-language"><b>Movie Language:</b> ${movie.original_language}</p>
+			<p id="movie-director "><b>Movie Director:</b> ${director.name}</p>
+			<p id="movie-vote-average "><b>Vote Average:</b> ${movie.vote_average}</p>
+			<p id="movie-vote-count "><b>Vote Count:</b> ${movie.vote_count}</p>
+			</br>
+			</br>
+			</div>
+			<div class='row'>
+			<h3>Overview:</h3>
+			<p id="movie-overview">${movie.overview}</p>
+			<iframe width='560' height='315' src="${trailerLink.link}
+			"></iframe>
+		</div>
+		</div>
+		</br>
+		
             <h3>Actors:</h3>
-            <ul id="actors" class="list-unstyled"></ul>
-    </div>`;
+			<ul id="actors" class="list-unstyled row text-center"></ul>
+			</br>
+			<h3>Related Movies:</h3>
+			<ul id="related-movie" class="list-unstyled row text-center"></ul>
+	</div>`;
+  //render credits
+  const actorsList = document.getElementById("actors");
+  relatedMoveiCreditsSliced.map((actor, index) => {
+    if (index < 5) {
+      const actorLi = document.createElement("li");
+      actorLi.setAttribute("class", "col-lg-2 col-md-4 col-sm-6");
+      actorLi.innerHTML = `<p>${actor.name}</p>
+      <img src="${
+        actor.profile_path
+          ? BACKDROP_BASE_URL + actor.profile_path
+          : "noImage.png"
+      }" alt = "${actor.name}" width = "150px"/>`;
+      actorLi.addEventListener("click", () => {
+        renderActorDetails(actor.id);
+      });
+      actorsList.appendChild(actorLi);
+    }
+  });
+  // render rel movies
+
+  const relatedMovieList = document.getElementById("related-movie");
+
+  RelatedMovies.results.map((movie, index) => {
+    if (index < 5) {
+      const relatedMoviesDiv = document.createElement("li");
+      relatedMoviesDiv.setAttribute("id", "related-movie-div");
+      relatedMoviesDiv.innerHTML = `<p>${movie.title}</p>
+			<img border="0" alt="${movie.title}" src="${
+        movie.poster_path
+          ? BACKDROP_BASE_URL + movie.poster_path
+          : "noImage.png"
+      }" width="100"/>
+			`;
+      relatedMoviesDiv.addEventListener("click", () => {
+        movieDetails(movie);
+      });
+      relatedMovieList.appendChild(relatedMoviesDiv);
+    }
+  });
 };
 
+/* ---Single Movie Page End--- */
 document.addEventListener("DOMContentLoaded", autorun);
