@@ -501,4 +501,32 @@ const renderActorDetails = async (actorId) => {
 
 /* ---Single Actor Page End--- */
 
+/* ---About Page--- */
+const aboutPage = () => {
+  CONTAINER.innerHTML = "";
+  CONTAINER.innerHTML = `
+<div id="aboutContainer">
+  <div id="aboutHeader">
+    <h1>aBoUt tHiS FaNCy pagE</h1>
+  </div>
+  <div id="fetchGif"> 
+  <img src="fetchPink.gif" alt="That's so fetch!">
+  </div> 
+  <div id="aboutContext">
+    <div id="aboutParagraph">
+     <p> This is a movie database app that was created by Öznur and Rama. Hope you enjoyed scrolling through it. <br> And we are not that mean.</p>
+    </div>
+  </div>
+</div>  
+`;
+  CONTAINER.appendChild(aboutDiv);
+};
+
+const aboutSection = document.getElementById("about");
+aboutSection.addEventListener("click", () => {
+  aboutPage();
+});
+
+/* ---About Page End--- */
+
 document.addEventListener("DOMContentLoaded", autorun);
