@@ -18,6 +18,10 @@ const constructUrl = (path) => {
   )}`;
 };
 
+const clear = () => {
+  CONTAINER.innerHTML = "";
+};
+
 /* ---Filter Section--- */
 
 const fetchPopular = async () => {
