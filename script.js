@@ -268,11 +268,34 @@ const renderMovies = (movies) => {
 
 /* ---Movie Page End--- */
 
+/* ---Movie Details--- */
+
 // You may need to add to this function, definitely don't delete it.
 const movieDetails = async (movie) => {
   const movieRes = await fetchMovie(movie.id);
-  renderMovie(movieRes);
+  const relatedMoveiCredits = await fetchCredits(movie.id); //.slice(0, 5);
+  const relatedMoveiCreditsSliced = relatedMoveiCredits.cast.slice(0, 6);
+  const credits = await fetchCredits(movie.id);
+  const RelatedMovies = await fetchRelatedMovies(movie.id);
+  let trailer = await fetchTrailer(movie.id);
+  trailer = trailer.results;
+  const trailerLink = {
+    link:
+      trailer.length > 0
+        ? `http://youtube.com/embed/${trailer[0].key}`
+        : "noImage.png",
+  };
+
+  renderMovie(
+    movieRes,
+    trailerLink,
+    credits,
+    relatedMoveiCreditsSliced,
+    RelatedMovies
+  );
 };
+
+/* ---Movie Details End--- */
 
 // This function is to fetch movies. You may need to add it or change some part in it in order to apply some of the features.
 const fetchMovies = async () => {
